@@ -22,3 +22,5 @@ const redirect = (event) => {
     body: html,
   };
 }
+
+module.exports = {redirect};
