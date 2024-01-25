@@ -11,16 +11,38 @@ const html = `
   </html>
 `;
 
-const redirect = (event) => {
-  const headers = {
-    Location: 'https://www.google.com',
-  };
+const repository = require('./repository');
 
-  return {
-    statusCode: 301,
-    headers,
-    body: html,
-  };
+const redirect = (event) => {
+  const params = event.pathParameters;
+
+  return repository.byId(params.id)
+    .then((resp) => {
+
+      console.log(resp);
+      if (!resp?.link) {
+        throw new Error('Not found');
+      }
+
+      return resp;
+    })
+    .then((resp) => {
+      const headers = {
+        Location: resp.link,
+      };
+
+      return {
+        statusCode: 301,
+        headers,
+        body: html,
+      }
+    })
+    .catch((err) => {
+      return {
+        statusCode: 404,
+        body: JSON.stringify(err),
+      }
+    })
 }
 
 module.exports = {redirect};

@@ -15,6 +15,8 @@ describe('Hanlder tests', () => {
   it('should redirect to google.com', async () => {
     const result = await redirect(event);
 
+    console.log(result);
+
     expect(result.statusCode).toBe(301);
     expect(result.headers).toEqual({ Location: 'https://www.google.com'});
     expect(typeof result.body).toBe('string');
